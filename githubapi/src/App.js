@@ -13,9 +13,11 @@ class App extends Component {
   search = (user, clear) => {
     this.state.msg = ""; //instead of using setState(to prevent re render App component to prevent the table to show(for a bit) while searching for somthing not exist or have no repos)
     console.log(user);
+    let u = encodeURIComponent(user);
     axios
-      .get(`https://api.github.com/users/${user}/repos`)
+      .get(`http://localhost:8600/search/${u}`)
       .then(response => {
+        console.log(response);
         if (response.data.length === 0) {
           this.setState({ msg: "No Repos" });
           return;
