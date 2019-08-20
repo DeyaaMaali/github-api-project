@@ -11,12 +11,15 @@ class App extends Component {
   };
 
   search = (user, clear) => {
-    this.setState({ msg: "" });
+    this.state.msg = ""; //instead of using setState(to prevent re render App component to prevent the table to show(for a bit) while searching for somthing not exist or have no repos)
     console.log(user);
     axios
       .get(`https://api.github.com/users/${user}/repos`)
       .then(response => {
-        if (response.data.length === 0) this.setState({ msg: "No Repos" });
+        if (response.data.length === 0) {
+          this.setState({ msg: "No Repos" });
+          return;
+        }
         this.setState({
           data: response.data.filter((elem, index) => index < 5)
         });
@@ -37,7 +40,9 @@ class App extends Component {
           <div className="Search">
             <SearchBar search={this.search} />
           </div>
-          <h2>Sorry, search dosnt match any user</h2>
+          <h2 style={{ textAlign: "center" }}>
+            Sorry, search dosnt match any user
+          </h2>
         </>
       );
     if (this.state.msg === "No Repos")
@@ -46,7 +51,7 @@ class App extends Component {
           <div className="Search">
             <SearchBar search={this.search} />
           </div>
-          <h2>Sorry, no Repos for this user</h2>
+          <h2 style={{ textAlign: "center" }}>Sorry, no Repos for this user</h2>
         </>
       );
     return (

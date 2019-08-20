@@ -9,8 +9,8 @@ class Table extends Component {
 
     return (
       <>
-        <div className="Table">
-          <table border="1">
+        <div className="TableDiv">
+          <table className="Table" border="1">
             <thead>
               <tr>
                 <th>number</th>
