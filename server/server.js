@@ -23,10 +23,15 @@ app.get("/search/:s", (req, res, next) => {
   let x = encodeURIComponent(req.params.s);
   console.log(x);
   let l = `http://api.github.com/users/${x}/repos`;
-  axios.get(l).then(response => {
-    res.json(response.data);
-    console.log(response.data);
-  });
+  axios
+    .get(l)
+    .then(response => {
+      res.json(response.data);
+      console.log(response.data);
+    })
+    .catch(error => {
+      res.json("errors");
+    });
 });
 const PORT = 8600;
 

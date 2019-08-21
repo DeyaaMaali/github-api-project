@@ -14,23 +14,27 @@ class App extends Component {
     this.state.msg = ""; //instead of using setState(to prevent re render App component to prevent the table to show(for a bit) while searching for somthing not exist or have no repos)
     console.log(user);
     let u = encodeURIComponent(user);
-    axios
-      .get(`http://localhost:8600/search/${u}`)
-      .then(response => {
-        console.log(response);
-        if (response.data.length === 0) {
-          this.setState({ msg: "No Repos" });
-          return;
-        }
-        this.setState({
-          data: response.data.filter((elem, index) => index < 5)
-        });
-      })
+    axios.get(`http://localhost:8600/search/${u}`).then(response => {
+      console.log(response);
+      console.log(response.data);
 
-      .catch(error => {
+      if (response.data.length === 0) {
+        this.setState({ msg: "No Repos" });
+        return;
+      }
+      if (response.data === "errors") {
         this.setState({ msg: "No User" });
-        console.log("error");
+        return;
+      }
+      this.setState({
+        data: response.data.filter((elem, index) => index < 5)
       });
+    });
+
+    // .catch(error => {
+    //   this.setState({ msg: "No User" });
+    //   console.log("error");
+    // });
 
     clear();
   };
@@ -61,7 +65,7 @@ class App extends Component {
         <div className="Search">
           <SearchBar search={this.search} />
         </div>
-        <Table data={this.state.data} />
+        {this.state.data.length !== 0 ? <Table data={this.state.data} /> : ""}
       </>
     );
   }
